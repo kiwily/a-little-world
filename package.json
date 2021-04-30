@@ -1,0 +1,23 @@
+{
+  "name": "express-socket",
+  "version": "1.0.0",
+  "description": "Minimal socket server to AL2",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start-dev": "nodemon --exec 'npm run secure && node index.js'",
+    "secure": "./secure.sh",
+    "sync": "nodemon --exec 'npm run single-sync'",
+    "single-sync": "rsync -avz -e 'ssh -i ../key-pg02.pem' --exclude={'node_modules','.git','.gitignore','.DS_Store'} ./ ec2-user@52.51.191.209:/home/ec2-user/express-socket",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AdrKacz",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
