@@ -5,8 +5,12 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
+const path = require("path");
+
+
+app.use('/static', express.static(path.join(__dirname, "public")));
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 io.on('connection', (socket) => {
