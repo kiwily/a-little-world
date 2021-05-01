@@ -16,14 +16,17 @@ readyForm.addEventListener("submit", (event) => {
 
   event.preventDefault();
 });
-socket.emit('join', {});
+socket.emit('join');
 
 socket.on('start', () => {
   document.querySelector("div#waiting-room").setAttribute("class", "hidden");
 });
 
 socket.on('data', (data) => {
-  console.log(data)
   updateIndications(data.indications);
   updateWords(data.words);
+});
+
+wordsDiv.addEventListener("click", (event) => {
+  socket.emit("tentative", event.target.textContent);
 });

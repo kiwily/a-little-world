@@ -8,6 +8,7 @@ exports.Game = class Game {
         this.words = [];
         this.assignedWords = {};
         this.assignedMessages = {};
+        this.assignedHelper = {};
         this.assign_words();
         this.assign_messages();
     }
@@ -32,7 +33,8 @@ exports.Game = class Game {
                 this.assignedMessages[player] = [{
                     "player": nextPlayer,
                     "word": this.assignedWords[nextPlayer]
-                }]
+                }];
+                this.assignedHelper[player] = nextPlayer;
             } else {
                 // Target random player
                 const random_player = this.players[this.random(this.nbPlayers)]
@@ -42,7 +44,8 @@ exports.Game = class Game {
                 this.assignedMessages.player.push({
                     "player": random_player,
                     "word": this.assignedWords[random_player]
-                }) 
+                });
+                this.assignedHelper[player] = random_player;
             }
         });
     }
@@ -53,6 +56,7 @@ exports.Game = class Game {
         this.words = [];
         this.assignedWords = {};
         this.assignedMessages = {};
+        this.assignedHelper = {};
         this.assign_words();
         this.assign_messages();
     }

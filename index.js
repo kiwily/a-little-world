@@ -11,6 +11,7 @@ const PORT = 3000;
 const app = express();
 const server = http.createServer(app);
 const games = {};
+const playerNameToSocketId = {};
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/static', express.static(path.join(__dirname, "public")));
@@ -26,6 +27,9 @@ app.post('/join-game', (req, res) => {
       started: false,
       game: null
     }
+  } else if (games[game].started){
+    res.status(400).send("Error, game already playing");
+    res.end();
   }
   res.redirect(`/game/${req.body["join-game"]}`);
 });
@@ -49,31 +53,47 @@ io.on('connection', (socket) => {
         games[partieId].players[socket.id] = {
             socket,
             playerName: socket.id,
-            ready: false
+            ready: false,
+            score: 0
         }
-        console.log(games)
     });
     // If player is ready update it and check if all players are ready
     socket.on('ready', (playerName) => {
-      games[partieId].players[socket.id].ready = true;
-      games[partieId].players[socket.id].playerName = playerName;
-      // Test if everyone is ready
-      let allReady = true;
-      Object.values(games[partieId].players).forEach((player, _) => {
-        allReady = allReady && player.ready
-      })
-      // All players are ready: start game
-      if (allReady){
-        const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
-        games[partieId].started = true;
-        games[partieId].game = new Game(playerNames)
-
-        Object.values(games[partieId].players).forEach(player => {
-          player.socket.emit('start');
+        playerNameToSocketId[playerName] = socket.id;
+        games[partieId].players[socket.id].ready = true;
+        games[partieId].players[socket.id].playerName = playerName;
+        // Test if everyone is ready
+        let allReady = true;
+        Object.values(games[partieId].players).forEach((player, _) => {
+            allReady = allReady && player.ready
+        })
+        // All players are ready: start game
+        if (allReady){
+            const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
+            games[partieId].started = true;
+            games[partieId].game = new Game(playerNames)
+            
+            Object.values(games[partieId].players).forEach(player => {
+            player.socket.emit('start');
         });
       }
     });
-
+    
+    socket.on('tentative', (word) => {
+        const playerName = games[partieId].players[socket.id].playerName;
+        const result = games[partieId].game.assignedWords[playerName] === word;
+        const teammate = games[partieId].players[playerNameToSocketId[games[partieId].game.assignedHelper[playerName]]];
+        if (result) {
+            games[partieId].players[socket.id].score ++;
+            teammate.score ++;
+        } else {
+            games[partieId].players[socket.id].score --;
+            teammate.score --;
+        }
+        console.log(games[partieId].players[socket.id].score)
+        socket.emit("result", result)
+    });
+    
     socket.on('disconnect', () => {
         console.log("[\x1b[31m-\x1b[0m] User disconnected\x1b[33m", socket.id, "\x1b[0m");
     });
