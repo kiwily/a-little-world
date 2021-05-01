@@ -2,18 +2,49 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="static/css/styles.css">
     <title>A Little World</title>
 
-    <script type="text/javascript" src="static/src/main.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js" defer></script>
+    <script type="text/javascript" src="static/src/connecter.js" defer></script>
+    <script type="text/javascript" src="static/src/main.js" defer></script>
   </head>
   <body>
     <div id="main">
       <div id="word">
 
+        <div>
+          <p>
+            Makes Adrien Guess Banana
+          </p>
+        </div>
+
+        <div>
+          <p>
+            Makes Tanguy Guess Table
+          </p>
+        </div>
+
       </div>
       <div id="question">
+
+        <button type="button" name="button">
+          Banana
+        </button>
+
+        <button type="button" name="button">
+          Phone
+        </button>
+
+        <button type="button" name="button">
+          Crips
+        </button>
+
+        <button type="button" name="button">
+          Table
+        </button>
 
       </div>
     </div>
