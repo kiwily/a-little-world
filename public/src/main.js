@@ -1,3 +1,13 @@
+const socket = io();
+
+var button = document.getElementById("question").getElementById("button")
+button.addEventListener("click", clickButton);
+
+function clickButton() {
+  io.emit('value of the button', button.value);
+  button.value = '';
+}
+
 function updateQuestion(words) {
   words.forEach((item, i) => {
     if (typeof item !== String) {

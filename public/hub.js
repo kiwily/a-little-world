@@ -1,4 +1,6 @@
 const listGame = [];
+document.getElementById("start").addEventListener("click", Start);
+document.getElementById("join").addEventListener("click", Join);
 
 var url = new URL('http://index.html');
 
