@@ -1,5 +1,5 @@
 const wordsDiv = document.querySelector("div#words");
-const indicationsDiv = document.querySelector("div#indications");
+const divIndications = document.querySelector("div#indications");
 
 let updateWordsId = undefined;
 function updateWords(words) {
@@ -28,15 +28,12 @@ function updateWords(words) {
   });
 };
 
-function updateIndications(indications) {
-  while (indicationsDiv.firstChild) {
-    indicationsDiv.removeChild(indicationsDiv.firstChild);
-  }
+function updateIndications(publicId, word) {
+  while (divIndications.firstChild) {
+    divIndications.removeChild(divIndications.firstChild);
+  };
 
-  indications.forEach((indication, _) => {
-    const word = document.getElementById("indications");
-    const div = document.createElement('div');
-    div.textContent = "Make " + indication.playerName + " Guess " + indication.word;
-    word.appendChild(div);
-  });
+  const div = document.createElement('div');
+  div.textContent = "Make " + publicId + " Guess " + word;
+  divIndications.appendChild(div);
 };

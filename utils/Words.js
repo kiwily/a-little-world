@@ -1,4 +1,4 @@
-exports.ALL_WORDS = [
+exports.Words = [
 "bead",
 "taste",
 "plough",
