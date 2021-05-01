@@ -1,7 +1,7 @@
-const { words } = require("utils/bdd.js");
+const { words } = require("../utils/bdd.js");
 const difficulty = 0;
 
-class Game {
+exports.Game = class Game {
     constructor(players) {
         this.players = players;
         this.nbPlayers = players.length;
@@ -17,7 +17,7 @@ class Game {
         }
     }
     static assign_messages() {
-        this.players.forEach(player, i){
+        this.players.forEach((player, i) => {
             if (difficulty == 0) {
                 // Target next player
                 let nextPlayer;
@@ -41,7 +41,7 @@ class Game {
                     "word": assignedWords[random_player]
                 }) 
             }
-        }
+        });
     }
     static random(i=words.length) {
         return Math.floor(Math.random() * i);

@@ -1,6 +1,6 @@
-export const words = [
+exports.words = [
     "chat",
     "rat",
     "chameau",
     "poulet"
-]
+];
