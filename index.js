@@ -13,6 +13,7 @@ const { Server } = require("socket.io");
 // const { Game } = require("./backend/game.js");
 
 const { BidirectionalObject } = require("./utils/BidirectionalObject");
+const { PERMUTATIONS } = require("./utils/Words");
 const { Console } = require('console');
 const { resolve } = require('path');
 
@@ -61,7 +62,8 @@ io.on('connection', (socket) => {
     const partyId = socket.handshake.headers.referer.split("/").pop();
 
     if (Parties[partyId] === undefined) {
-      throw new Error(`Access Not Existing Party > ${partyId}`);
+      //throw new Error(`Access Not Existing Party > ${partyId}`);
+      return
     };
 
     Players[socket.id] = Players[socket.id] || {
@@ -78,7 +80,7 @@ io.on('connection', (socket) => {
     // Get the Public Id of Player (type by user)
     socket.on('ready', (playerPublicId) => {
         // The game doesn't exist anymore
-        if (Parties[partyId] === undefined) {
+        if (Parties[partyId] === undefined) {s
           return;
         };
 
@@ -110,6 +112,7 @@ io.on('connection', (socket) => {
           }, 1000);
           // Warn all players that the party starts
           // TODO: pack sockets in sessions
+          console.log("start")
           io.emit(`party ${partyId} start`);
           return;
         }
@@ -210,10 +213,12 @@ const { Words } = require("./utils/Words.js");
 
 function updateQuestions(party) {
   // Assign a word to each player
-  const wordsOfRound = [];
+  const wordsOfRound = [""];
   party.players.forEach((player, i) => {
-    const chosenWord = Words[Math.floor(Math.random() * Words.length)];
-    // TODO: Avoid to player to have the same word
+    let chosenWord = "";
+    while (wordsOfRound.includes(chosenWord)){
+        chosenWord = Words[Math.floor(Math.random() * Words.length)];
+    }
     player.word = chosenWord;
     wordsOfRound.push(chosenWord);
   });
@@ -226,11 +231,7 @@ function updateQuestions(party) {
   });
   // Assign helpers pairs
   party.players.forEach((player, i) => {
-    // TODO: No be able to be its own helper
-    const iChosenPlayerId = Math.floor(Math.random() * chosenPlayersId.length);
-    const chosenPlayerId = chosenPlayersId[iChosenPlayerId];
-    // Remove chosen one from available
-    chosenPlayersId.splice(iChosenPlayerId, 1);
+    let chosenPlayerId = party.players[PERMUTATIONS[party.players.length][i]].playerId;
     // Assign helper
     player.helper = Players[chosenPlayerId];
     Players[chosenPlayerId].helpy = player;
@@ -244,14 +245,20 @@ function updateQuestions(party) {
 
   // Assign a team word list to each player
   party.players.forEach((player, i) => {
-    const wordsList = [];
-    for (let i = 0; i < 4; i++) {
-      // TODO: Choose Word List with wordsOfRound
-      const chosenWord = Words[Math.floor(Math.random() * Words.length)];
-      wordsList.push(chosenWord);
-    };
-    // Replace on of the word with the player word
-    wordsList[Math.floor(Math.random() * wordsList.length)] = player.word;
+    const wordsList = wordsOfRound.filter(x => x.length > 0);
+    while (wordsList.length < 4){
+        const chosenWord = Words[Math.floor(Math.random() * Words.length)];
+        wordsList.push(chosenWord);
+    }
+    while (wordsList.length > 4){
+        const chosenIndex = Math.floor(Math.random() * Words.length);
+        wordsList.splice(chosenIndex, 1);
+    }
+    if (!wordsList.includes(player.word)){
+        // Replace one of the word with the player word
+        wordsList[Math.floor(Math.random() * wordsList.length)] = player.word;
+    }
+    wordsList.sort(() => (Math.random() > 0.5)? 1 : -1)
 
     // Alert the player of its new word list
     player.emit("wordlist", wordsList);

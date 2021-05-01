@@ -1,5 +1,6 @@
 const wordsDiv = document.querySelector("div#words");
 const divIndications = document.querySelector("div#indications");
+const divWaitingList = document.querySelector("div#waiting-list");
 
 let updateWordsId = undefined;
 function updateWords(words) {
@@ -35,5 +36,20 @@ function updateIndications(publicId, word) {
 
   const div = document.createElement('div');
   div.textContent = "Make " + publicId + " Guess " + word;
+  divIndications.appendChild(div);
+};
+
+function updateWaitingList(playerPublicIds, nbrPlayersInidentified) {
+  while (divWaitingList.firstChild) {
+    divWaitingList.removeChild(divWaitingList.firstChild);
+  };
+  playerPublicIds.forEach(id => {
+    const div = document.createElement('div');
+    div.textContent = id + " is in hub and ready to go! ";
+    divIndications.appendChild(div);
+  });
+
+  const div = document.createElement('div');
+  div.textContent = nbrPlayersInidentified + " players unidentified waiting in Hub.";
   divIndications.appendChild(div);
 };

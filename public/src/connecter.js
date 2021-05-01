@@ -24,10 +24,18 @@ function lauchPartyListener() {
     return;
   });
 
-  socket.on(`party ${PARTY_ID} public-update`, (event) => {
-    // Update Waiting List
-    const publicUpdate = event.publicUpdate;
-    return;
+  socket.on(`party ${PARTY_ID} public-update`, (publicUpdate) => {
+    const playerPublicIds = [];
+    let nbrPlayersInidentified = 0;
+    console.log(publicUpdate)
+    publicUpdate.forEach(element => {
+      if (typeof element == "string"){
+        playerPublicIds.append(element)
+      } else {
+        nbrPlayersInidentified += element;
+      }
+    });
+    updateWaitingList(playerPublicIds, nbrPlayersInidentified);
   })
 };
 
