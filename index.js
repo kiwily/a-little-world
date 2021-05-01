@@ -13,6 +13,7 @@ const server = http.createServer(app);
 const games = {};
 const playerNameToSocketId = {};
 
+app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/static', express.static(path.join(__dirname, "public")));
 app.get('/', (req, res) => {
@@ -40,6 +41,10 @@ app.get('/game/:gameId', (req, res) => {
     res.redirect("/");
   }
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/test", (req, res) => {
+  res.render('test', { title: 'Hey', message: 'Hello there!' });
 });
 
 // ------------- SOCKET TIME -------------
@@ -72,13 +77,13 @@ io.on('connection', (socket) => {
             const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
             games[partieId].started = true;
             games[partieId].game = new Game(playerNames)
-            
+
             Object.values(games[partieId].players).forEach(player => {
             player.socket.emit('start');
         });
       }
     });
-    
+
     socket.on('tentative', (word) => {
         const playerName = games[partieId].players[socket.id].playerName;
         const result = games[partieId].game.assignedWords[playerName] === word;
@@ -93,7 +98,7 @@ io.on('connection', (socket) => {
         console.log(games[partieId].players[socket.id].score)
         socket.emit("result", result)
     });
-    
+
     socket.on('disconnect', () => {
         console.log("[\x1b[31m-\x1b[0m] User disconnected\x1b[33m", socket.id, "\x1b[0m");
     });
