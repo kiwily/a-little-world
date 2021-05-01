@@ -5,6 +5,8 @@ const path = require("path");
 const { Server } = require("socket.io");
 const { Game } = require("./backend/game.js");
 
+const { BidirectionalObject } = require("./utils/BidirectionalObject");
+
 const PORT = 3000;
 const app = express();
 const server = http.createServer(app);
