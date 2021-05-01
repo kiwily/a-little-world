@@ -16,7 +16,7 @@ div#waiting-room {
 }
 
 
-div#waiting-room h1, div#waiting-room button {
+div#waiting-room h1, div#waiting-room h2, div#waiting-room button {
   color: #E6EFE9
 }
 
@@ -70,4 +70,8 @@ div#waiting-room form button {
 
 div#waiting-room form button:hover {
   background-color: transparent;
+}
+
+div#waiting-room form button:active {
+  transform: scale(0.8);
 }
