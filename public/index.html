@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" href="/static/css/wainting-room.css">
-    <link rel="stylesheet" href="/static/css/info.css">
+    <link rel="stylesheet" href="/static/css/progress.css">
 
     <link rel="stylesheet" href="/static/css/particle.css">
 
@@ -21,11 +21,12 @@
     <script type="text/javascript" src="/static/src/connecter.js" defer></script>
 
     <script type="text/javascript" src="/static/src/particle.js" defer></script>
+    <script type="text/javascript" src="/static/src/progress.js" defer></script>
   </head>
   <body>
     <div class="hidden" id="waiting-room">
       <h1>Waiting for others ...</h1>
-      <form action="/join-game" method="POST">
+      <form action="" method="">
         <input required type="text" name="player-name"/>
         <button type="submit">Ready</button>
       </form>
@@ -65,18 +66,12 @@
         <button type="button" name="button">
           Word
         </button>
-
       </div>
 
-    </div>
-
-    <div id="info">
-      <div id="timer">
-        55
-      </div>
-      <div id="position">
-        2
+      <div id="progress">
+        <div id="bar"></div>
       </div>
     </div>
+
   </body>
 </html>
