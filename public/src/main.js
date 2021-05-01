@@ -1,6 +1,6 @@
-const io = new Server(server);
+const socket = io();
 
-var button = document.getElementById("question").getElementById("button")
+var button = document.getElementById("button");
 button.addEventListener("click", clickButton);
 
 function clickButton() {
@@ -18,22 +18,28 @@ io.on('start', () => {
     gameView.visible = true;
 });
 
-io.emit('data', (data) => {
+io.on('data', (data) => {
   updateQuestions(data.words);
   updateWords(data.questions);
 });
 
 function updateWords(words) {
   words.forEach((word, _) => {
-    
     console.log("Question word ", word);
+    let question = document.getElementById("question");
+    let button = document.createElement('button');
+    button.textContent = word;
+    button.type = "button";
+    button.name = "button";
+    question.append(button);
   });
 };
 
-
 function updateQuestions(questions) {
-  if (typeof word !== String || typeof color !== String) {
-    return;
-  };
-  console.log("Color >", color, ", word >", word);
+  questions.forEach((question, _) => {
+    let word = document.getElementById("word");
+    let div = document.createElement('div');
+    div.textContent = "Make " + question[0] + " Guess " + question[1];
+    word.append(div);
+  });
 };
