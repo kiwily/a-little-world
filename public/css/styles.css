@@ -84,7 +84,7 @@ body {
   flex-direction: column;
 }
 
-#word {
+#indications {
   width: 90%;
   box-sizing: border-box;
 
@@ -99,13 +99,13 @@ body {
   -webkit-justify-content: space-around;
 }
 
-#word div {
+#indications div {
   padding: 0.5rem;
 
   text-align: center;
 }
 
-#question {
+#words {
   width: 90%;
   box-sizing: border-box;
 
@@ -118,9 +118,7 @@ body {
 }
 
 
-#question button {
-  cursor: pointer;
-
+#words button {
   box-sizing: border-box;
 
   cursor: pointer;
@@ -136,10 +134,10 @@ body {
   text-align: center;
 }
 
-#question button:hover {
+#words button:hover {
   background-color: transparent;
 }
 
-#question button:active {
+#words button:active {
   transform: scale(0.8);
 }
