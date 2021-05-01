@@ -68,7 +68,8 @@ io.on('connection', (socket) => {
         };
         games[partieId].players[socket.id] = {
             socket,
-            playerName: socket.id,
+            Id: socket.id,
+            playerName: '',
             ready: false,
             score: 0,
             position: 0
@@ -78,28 +79,27 @@ io.on('connection', (socket) => {
         });
     });
     // If player is ready update it and check if all players are ready
-    socket.on('ready', (playerName) => {
-        
+    socket.on('ready', (newPlayerName) => {
         if (games[partieId] === undefined) {
           return;
         };
+
         Object.values(games[partieId].players).forEach(player => {
-            player.socket.emit('new-player-name', playerName);
+            player.socket.emit('new-player-name', newPlayerName);
         });
-        playerNameToSocketId[playerName] = socket.id;
+        // playerNameToSocketId[newPlayerName] = socket.id;
         games[partieId].players[socket.id].ready = true;
-        games[partieId].players[socket.id].playerName = playerName;
+        games[partieId].players[socket.id].playerName = newPlayerName;
         // Test if everyone is ready
         let allReady = true;
-        Object.values(games[partieId].players).forEach((player, _) => {
-            console.log("ready", allReady, player.ready);
-            allReady = allReady && player.ready
+        Object.values(games[partieId].players).forEach(({ready}, _) => {
+            console.log("ready", allReady, ready);
+            allReady = allReady && ready
         })
         // All players are ready: start game
         if (allReady){
-            const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
             games[partieId].started = true;
-            games[partieId].game = new Game(playerNames)
+            games[partieId].game = new Game(games[partieId].players)
 
             Object.values(games[partieId].players).forEach(player => {
                 player.socket.emit('start');
@@ -145,15 +145,15 @@ function loop() {
         gameOverview.counter -= 1;
         const is_ended = (gameOverview.counter < 0);
         const scoreDict = {};
-        Object.values(gameOverview.players).forEach(({ playerName, score }) => {
-                scoreDict[score] = playerName;
+        Object.values(gameOverview.players).forEach(({ Id, score }) => {
+                scoreDict[score] = Id;
         });
         Object.keys(scoreDict).sort().forEach((score, i) => {
-                const playerName = scoreDict[score]
-                gameOverview.players[playerNameToSocketId[playerName]].position = i + 1;
+                const Id = scoreDict[score]
+                gameOverview.players[Id].position = i + 1;
         });
         // Each player receives different info
-        Object.values(gameOverview.players).forEach(({ socket, playerName, position }) => {
+        Object.values(gameOverview.players).forEach(({ socket, playerName, position, Id }) => {
             if (is_ended) {
                 const data = {
                     players: Object.values(gameOverview.players).map(p => {
@@ -169,8 +169,8 @@ function loop() {
                 socket.disconnect();
             } else {
                 const data = {
-                    words: gameOverview.game.possibleWords[playerName],
-                    indications: gameOverview.game.assignedMessages[playerName],
+                    words: gameOverview.game.possibleWords[Id],
+                    indications: gameOverview.game.assignedMessages[Id],
                     counter: gameOverview.counter,
                     position
                 };

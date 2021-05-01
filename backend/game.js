@@ -4,7 +4,7 @@ const difficulty = 0;
 exports.Game = class Game {
     constructor(players) {
         this.players = players;
-        this.nbPlayers = players.length;
+        this.nbPlayers = Object.values(players).length;
         this.words = [];
         this.assignedWords = {};
         this.assignedMessages = {};
@@ -16,18 +16,18 @@ exports.Game = class Game {
     }
 
     assignWords() {
-        this.players.forEach((player, _) => {
+        Object.values(this.players).forEach(({Id}, _) => {
             let word = ALL_WORDS[this.random()];
             while (this.words.includes(word)) {
               word = ALL_WORDS[this.random()];
             };
-            this.assignedWords[player] = word;
+            this.assignedWords[Id] = word;
             this.words.push(word);
         });
     };
 
     assignPossibleWords() {
-        this.players.forEach((player, _) => {
+        Object.values(this.players).forEach(({Id}, _) => {
             // Less than 4 words
             if (this.words.length <= 4) {
                 const words = [...this.words];
@@ -40,10 +40,10 @@ exports.Game = class Game {
                     };
                     words.push(word)
                 }
-                this.possibleWords[player] = words.sort(() => (Math.random() > 0.5)? 1 : -1 );
+                this.possibleWords[Id] = words.sort(() => (Math.random() > 0.5)? 1 : -1 );
             } else {
                 //More than 4 players
-                const words = [this.assignedWords[player]];
+                const words = [this.assignedWords[Id]];
                 for (let i = 0; i < 3; i++) {
                     // Take random from player word
                     let word = this.words[this.random(this.words.length)];
@@ -52,38 +52,39 @@ exports.Game = class Game {
                     };
                     words.push(word)
                 };
-                this.possibleWords[player] = words.sort(() => (Math.random() > 0.5)? 1 : -1 );
+                this.possibleWords[Id] = words.sort(() => (Math.random() > 0.5)? 1 : -1 );
             }
         });
     }
 
     assignMessages() {
-        this.players.forEach((player, i) => {
+        Object.values(this.players).forEach(({playerName, Id}, i) => {
             if (difficulty == 0) {
                 // Target next player
                 let nextPlayer;
                 if (i + 1 >= this.nbPlayers) {
-                    nextPlayer = this.players[0];
+                    nextPlayer = Object.values(this.players)[0];
                 } else {
-                    nextPlayer = this.players[i + 1];
+                    nextPlayer = Object.values(this.players)[i + 1];
                 }
-                this.assignedMessages[player] = [{
-                    "player": nextPlayer,
-                    "word": this.assignedWords[nextPlayer]
+                this.assignedMessages[Id] = [{
+                    "playerName": nextPlayer.playerName,
+                    "word": this.assignedWords[nextPlayer.Id]
                 }];
-                this.assignedHelper[player] = nextPlayer;
-            } else {
-                // Target random player
-                const random_player = this.players[this.random(this.nbPlayers)]
-                if (this.assignedMessages[random_player] === undefined){
-                    this.assignedMessages[random_player] = [];
-                }
-                this.assignedMessages.player.push({
-                    "player": random_player,
-                    "word": this.assignedWords[random_player]
-                });
-                this.assignedHelper[player] = random_player;
+                this.assignedHelper[Id] = nextPlayer.Id;
             }
+            // else {
+            //     // Target random player
+            //     const random_player = Object.values(this.players)[this.random(this.nbPlayers)]
+            //     if (this.assignedMessages[random_player] === undefined){
+            //         this.assignedMessages[random_player] = [];
+            //     }
+            //     this.assignedMessages.player.push({
+            //         "player": random_player,
+            //         "word": this.assignedWords[random_player]
+            //     });
+            //     this.assignedHelper[player] = random_player;
+            // }
         });
     }
     random(i=ALL_WORDS.length) {
