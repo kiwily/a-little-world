@@ -9,6 +9,7 @@ const { BidirectionalObject } = require("./utils/BidirectionalObject");
 const { Console } = require('console');
 
 const PORT = 3000;
+const TIMING = 5;
 
 const app = express();
 const server = http.createServer(app);
@@ -30,7 +31,7 @@ app.post('/', (req, res) => {
       players: {},
       started: false,
       game: null,
-      counter: 60
+      counter: TIMING
     }
   } else if (games[game].started){
     res.redirect(`/`);
@@ -141,9 +142,11 @@ function loop() {
             if (is_ended) {
                 const data = {
                     players: Object.values(gameOverview.players).map(p => {
-                        p.playerName,
-                        p.score,
-                        p.position
+                        return {
+                            "playerName": p.playerName,
+                            "score": p.score,
+                            "position": p.position
+                        }
                     })
                 };
                 socket.emit('finish', data);

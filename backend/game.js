@@ -13,7 +13,6 @@ exports.Game = class Game {
         this.assignWords();
         this.assignMessages();
         this.assignPossibleWords();
-        console.log("FIN")
     }
 
     assignWords() {
@@ -29,23 +28,18 @@ exports.Game = class Game {
 
     assignPossibleWords() {
         this.players.forEach((player, _) => {
-            console.log(1)
             // Less than 4 words
             if (this.words.length <= 4) {
-                console.log(2)
                 const words = [...this.words];
 
                 // Fill rest with random from BDD
                 while (words.length < 4) {
-                    console.log(3)
                     let word = ALL_WORDS[this.random()];
                     while (words.includes(word)) {
-                        console.log(4)
                         word = ALL_WORDS[this.random()];
                     };
                     words.push(word)
                 }
-                console.log(5)
                 this.possibleWords[player] = words.sort(() => (Math.random() > 0.5)? 1 : -1 );
             } else {
                 //More than 4 players
