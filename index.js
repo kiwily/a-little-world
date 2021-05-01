@@ -7,9 +7,14 @@ const { Game } = require("./backend/game.js");
 
 const { BidirectionalObject } = require("./utils/BidirectionalObject");
 const { Console } = require('console');
+const { resolve } = require('path');
 
 const PORT = 3000;
 const TIMING = 60;
+const ERRORS = {
+    "1": 'Cannot join a started game.',
+    "2": 'This game name is undefined.'
+};
 
 const app = express();
 const server = http.createServer(app);
@@ -21,8 +26,9 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use('/static', express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.render('hub', { title: 'Hey', message: 'Hello there!' });
-});
+    const error = ERRORS[req.query.e] || "";
+    res.render('hub', { error });
+  });
 
 app.post('/', (req, res) => {
   const game = req.body["join-game"];
@@ -34,17 +40,18 @@ app.post('/', (req, res) => {
       counter: TIMING
     }
   } else if (games[game].started){
-    res.redirect(`/`);
+    res.redirect("/?e=1")
+  } else {
+    res.redirect(`/game/${req.body["join-game"]}`);
   }
-  res.redirect(`/game/${req.body["join-game"]}`);
 });
 app.get('/game/:gameId', (req, res) => {
   const gameId = req?.params?.gameId || ""
   if (games[gameId] === undefined) {
-    console.log("Game ID Undefined", gameId);
-    res.redirect("/");
+    res.redirect("/?e=2")
+  } else {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
   }
-  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ------------- SOCKET TIME -------------
@@ -128,7 +135,7 @@ function loop() {
     // Only if game is playing
     if (gameOverview.started){
         gameOverview.counter -= 1;
-        const is_ended = (gameOverview.counter <= 0);
+        const is_ended = (gameOverview.counter < 0);
         const scoreDict = {};
         Object.values(gameOverview.players).forEach(({ playerName, score }) => {
                 scoreDict[score] = playerName;
