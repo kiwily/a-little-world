@@ -24,7 +24,7 @@
 
   </head>
   <body>
-    <div id="waiting-room">
+    <div class="hidden" id="waiting-room">
       <h1>Waiting for others ...</h1>
       <form action="" method="">
         <input required type="text" name="player-name"/>
@@ -32,11 +32,26 @@
       </form>
       <h2 class="hidden">Your Name</h2>
     </div>
-    <div class="hidden" id="score-dashboard">
-      <h1>Dashboard</h1>
-      <div id="scores">
 
-      </div>
+    <div id="dashboard">
+      <h1>Dashboard</h1>
+      <table>
+        <tr>
+          <th>Position</th>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+        <tr>
+          <th>1</th>
+          <th>AABB</th>
+          <th>233</th>
+        </tr>
+        <tr>
+          <th>2</th>
+          <th>Bsfffh</th>
+          <th>24</th>
+        </tr>
+      </table>
     </div>
 
     <div id="main">
@@ -72,7 +87,7 @@
         <button type="button" name="button">
           Word
         </button>
-      </div>    
+      </div>
     </div>
     <div id="progress">
       <div id="bar"></div>

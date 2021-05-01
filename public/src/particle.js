@@ -8,7 +8,7 @@ function clicked(event) {
 };
 
 let shakeId = undefined;
-function shakeScreen() {
+function failed() {
   if (shakeId !== undefined) {
     return;
   };
@@ -18,6 +18,10 @@ function shakeScreen() {
     document.querySelector("div#main").setAttribute("class", "");
     shakeId = undefined;
   }, 500);
+};
+
+function succeed() {
+  return;
 };
 
 

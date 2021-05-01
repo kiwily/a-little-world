@@ -40,7 +40,7 @@ socket.on('finish', ({players}) => {
 
   Object.values(players).forEach(({ playerName, score, position}, _) => {
     let div = document.createElement('div');
-    div.textContent = playerName + " | " + position + " | " + score;
+    div.textContent = playerName + " | " + ('00' + position).slice(-1) + " | " + ('00' + score).slice(-3);
     scoresDiv.append(div);
   });
 });
@@ -58,9 +58,8 @@ wordsDiv.addEventListener("click", (event) => {
 
 socket.on("result", (result) => {
   if (result === true) {
-    console.log("Good game");
+    succeed();
   } else if (result === false) {
-    console.log("Bad game");
-    shakeScreen();
+    failed();
   };
 });
