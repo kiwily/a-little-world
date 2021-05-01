@@ -1,6 +1,11 @@
 function pop(event) {
-  console.log("pop");
+  event.target.setAttribute("class", "particle");
+  setTimeout(() => {
+    if (event !== undefined) {
+      event.target.setAttribute("class", "");
+    };
+  }, 500);
 }
 
 
-document.querySelector("#test-button").addEventListener("click", pop);
+document.querySelector("div#words").addEventListener("click", pop);

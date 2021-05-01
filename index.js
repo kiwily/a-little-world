@@ -28,6 +28,11 @@ app.post('/join-game', (req, res) => {
   res.redirect(`/game/${req.body["join-game"]}`);
 });
 app.get('/game/:gameId', (req, res) => {
+  const gameId = req?.params?.gameId || ""
+  if (games[gameId] === undefined) {
+    console.log("Game ID Undefined", gameId);
+    res.redirect("/");
+  }
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
@@ -60,13 +65,13 @@ io.on('connection', (socket) => {
         const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
         games[partieId].started = true;
         games[partieId].game = new Game(playerNames)
-        
+
         Object.values(games[partieId].players).forEach(player => {
           player.socket.emit('start');
         });
       }
     });
-    
+
     socket.on('disconnect', () => {
         console.log("[\x1b[31m-\x1b[0m] User disconnected\x1b[33m", socket.id, "\x1b[0m");
     });
@@ -91,7 +96,7 @@ function loop() {
           indications: gameOverview.game.assignedMessages[player.playerName]
         };
         player.socket.emit('data', data);
-      }); 
+      });
     }
   });
 }
