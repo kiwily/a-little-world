@@ -16,28 +16,27 @@ io.on('start', () => {
 });
 
 io.on('data', (data) => {
-  updateQuestions(data.words);
-  updateWords(data.questions);
+  updateIndications(data.indications);
+  updateWords(data.words);
 });
 
 function updateWords(words) {
   words.forEach((word, _) => {
-    console.log("Question word ", word);
-    let question = document.getElementById("question");
+    let divprinc = document.getElementById("words");
     let button = document.createElement('button');
     button.textContent = word;
     button.type = "button";
     button.name = "button";
-    question.append(button);
+    divprinc.append(button);
     button.addEventListener("click", clickButton);
   });
 };
 
-function updateQuestions(questions) {
-  questions.forEach((question, _) => {
-    let word = document.getElementById("word");
+function updateIndications(indications) {
+  indications.forEach((indication, _) => {
+    let divprinc = document.getElementById("indications");
     let div = document.createElement('div');
-    div.textContent = "Make " + question[0] + " Guess " + question[1];
-    word.append(div);
+    div.textContent = "Make " + indication.player + " Guess " + indication.word;
+    divprinc.append(div);
   });
 };
