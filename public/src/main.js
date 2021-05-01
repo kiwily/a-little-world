@@ -36,7 +36,7 @@ function updateIndications(indications) {
   indications.forEach((indication, _) => {
     const word = document.getElementById("indications");
     const div = document.createElement('div');
-    div.textContent = "Make " + indication.player + " Guess " + indication.word;
+    div.textContent = "Make " + indication.playerName + " Guess " + indication.word;
     word.appendChild(div);
   });
 };
