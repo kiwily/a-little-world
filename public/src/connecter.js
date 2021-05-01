@@ -2,6 +2,7 @@ const socket = io();
 const readyForm = document.querySelector("div#waiting-room form");
 const nameText = document.querySelector("div#waiting-room h2");
 const dashboardTable = document.querySelector("div#dashboard table");
+const usersDiv = document.querySelector("div#users");
 
 const tableHeaders = dashboardTable.querySelector("tr:first-child").cloneNode(true);
 const templateLine = dashboardTable.querySelector("tr:nth-child(2)").cloneNode(true);
@@ -28,11 +29,20 @@ readyForm.addEventListener("submit", (event) => {
 socket.on('start', () => {
   document.querySelector("div#waiting-room").setAttribute("class", "hidden");
 });
-socket.on('new-player', () => {
-   console.log("NEW PLAYER TO AFFICHE")
-});
-socket.on('new-player-name', (name) => {
-   console.log("AFFICHE PLAYER NAME TO AFFICHE (and remove one from the non named ones)", name)
+socket.on('waiting-update', (players) => {
+  while (usersDiv.firstChild) {
+    usersDiv.removeChild(usersDiv.firstChild);
+  }
+
+  Object.values(players).forEach(({playerName, ready}, _) => {
+    let div = document.createElement('div');
+    if (ready){
+      div.textContent = playerName + " is Ready to play!";
+    } else {
+      div.textContent = playerName + " is waiting with you";
+    }
+    scoresDiv.append(div);
+  });
 });
 
 socket.on('finish', ({players}) => {
