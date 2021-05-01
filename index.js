@@ -16,8 +16,9 @@ const playerNameToSocketId = {};
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/static', express.static(path.join(__dirname, "public")));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "hub.html"));
+
+app.get("/", (req, res) => {
+  res.render('hub', { title: 'Hey', message: 'Hello there!' });
 });
 
 app.post('/join-game', (req, res) => {
@@ -41,10 +42,6 @@ app.get('/game/:gameId', (req, res) => {
     res.redirect("/");
   }
   res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-app.get("/test", (req, res) => {
-  res.render('test', { title: 'Hey', message: 'Hello there!' });
 });
 
 // ------------- SOCKET TIME -------------
