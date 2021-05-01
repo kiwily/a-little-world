@@ -7,6 +7,7 @@ const io = new Server(server);
 
 const path = require("path");
 
+const listGame = [];
 
 app.use('/static', express.static(path.join(__dirname, "public")));
 app.get('/hub', (req, res) => {
@@ -21,6 +22,13 @@ io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {
     console.log('message: ' + msg);
     io.emit('chat message', msg);
+  });
+  socket.on('Join a new game', (msg) => {
+    listGame.push(msg);
+  });
+  socket.on('Join a current game', (msg) => {
+    // if (listGame.includes(msg)) {
+    // }
   });
   socket.on('disconnect', () => {
     console.log("[\x1b[31m-\x1b[0m] User disconnected\x1b[33m", socket.id, "\x1b[0m");
