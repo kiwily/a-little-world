@@ -16,12 +16,15 @@
   </style>
 </head>
 <body>
-    <button id="start">Start a new game</button>
-    <textarea id="nameNewGame"></textarea>
-    <button id="join">Join a game</button>
-    <textarea id="nameGame"></textarea>
+  <form id="formcreate" action="/createGame" method="POST">
+    <input id="nameNewGame" name="nameNewGame" autocomplete="off"/>
+    <button type="submit">Start a new game </button>
+  </form>
+  <form id="formjoin" action="/joinGame" method="POST">
+    <input  id="nameGame" name="nameGame" autocomplete="off" />
+    <button type="submit">Join a game </button>
+  </form>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/static/hub.js"></script>
 </body>
 </html>

@@ -1,13 +1,17 @@
-const socket = io();
-document.getElementById("start").addEventListener("click", Start);
-document.getElementById("join").addEventListener("click", Join);
+const listGame = [];
+
+var url = new URL('http://index.html');
 
 function Start() {
-  socket.emit('Join a new game', document.getElementById('nameNewGame').value);
+  var name = document.getElementById('nameNewGame').value;
+  listGame.push(name);
   document.getElementById('nameNewGame').value = '';
 }
 
 function Join() {
-  socket.emit('Join a current game', document.getElementById('nameGame').value);
+  var name = document.getElementById('nameGame').value;
+  if (listGame.includes(name)) {
+
+  }
   document.getElementById('nameGame').value = '';
 }
