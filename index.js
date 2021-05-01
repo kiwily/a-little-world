@@ -8,6 +8,8 @@ const { Game } = require("./backend/game.js");
 const { BidirectionalObject } = require("./utils/BidirectionalObject");
 
 const PORT = 3000;
+const REFRESH_RATE = 4;
+
 const app = express();
 const server = http.createServer(app);
 const games = {};
@@ -27,7 +29,8 @@ app.post('/', (req, res) => {
     games[game] = {
       players: {},
       started: false,
-      game: null
+      game: null,
+      counter: 60
     }
   } else if (games[game].started){
     res.redirect(`/`);
@@ -96,6 +99,7 @@ io.on('connection', (socket) => {
         if (result) {
             games[partieId].players[socket.id].score += 1;
             teammate.score += 2;
+            games[partieId].game.refresh();
         } else {
             games[partieId].players[socket.id].score -= 1;
         }
@@ -108,7 +112,7 @@ io.on('connection', (socket) => {
     });
 });
 
-const id = setInterval(loop, 5000);
+const id = setInterval(loop, 1000);
 
 server.listen(PORT, () => {
   console.log(`listening on :${PORT}`);
@@ -119,14 +123,32 @@ function loop() {
   Object.values(games).forEach((gameOverview) => {
     // Only if game is playing
     if (gameOverview.started){
-      gameOverview.game.refresh();
+      gameOverview.counter --;
+      const is_ended = gameOverview.counter <= 0;
+      const scoreDict = {}
+      Object.values(gameOverview.players).forEach(({ playerName, score }) => {
+            scoreDict[score] = playerName;
+      });
+      Object.keys(scoreDict).sort().forEach((score, i) => {
+            const playerName = scoreDict[score]
+            gameOverview.players[playerName].position = i + 1;
+      });
       // Each player receives different info
-      Object.values(gameOverview.players).forEach((player) => {
-        const data = {
-          words: gameOverview.game.getWords(gameOverview.game.assignedWords[player.playerName]),
-          indications: gameOverview.game.assignedMessages[player.playerName]
-        };
-        player.socket.emit('data', data);
+      Object.values(gameOverview.players).forEach(({ socket, playerName, position }) => {
+          if (is_ended) {
+            const data = {
+                words: gameOverview.game.getWords(gameOverview.game.assignedWords[player.playerName]),
+                indications: gameOverview.game.assignedMessages[playerName],
+                counter: gameOverview.counter,
+                position
+            };
+            socket.emit('data', data);
+          } else {
+            const data = {
+              players: gameOverview.players
+            };
+            socket.emit('end', data);
+          }
       });
     }
   });

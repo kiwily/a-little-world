@@ -5,3 +5,4 @@ Minimum socket server to AL2
 timer
 2 joueurs avec meme nom
 page d'erreur
+lister les joueurs dans le hub
