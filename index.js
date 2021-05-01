@@ -58,9 +58,13 @@ io.on('connection', (socket) => {
       })
       // All players are ready: start game
       if (allReady){
-        const playerNames = games[partieId].players.map(x => x.playerName);
+        const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
         games[partieId].started = true;
         games[partieId].game = new Game(playerNames)
+        
+        Object.values(games[partieId].players).forEach(player => {
+          player.socket.emit('playing');
+        });
       }
     });
     
@@ -77,15 +81,15 @@ server.listen(PORT, () => {
 
 function loop() {
   // Send data for each game separately
-  Object.values(games).forEach((game) => {
+  Object.values(games).forEach((gameOverview) => {
     // Only if game is playing
-    if (game.started){
-      game.game.refresh();
+    if (gameOverview.started){
+      gameOverview.game.refresh();
       // Each player receives different info
-      Object.values(game.players).forEach((player) => {
+      Object.values(gameOverview.players).forEach((player) => {
         const data = {
-          words: game.words,
-          indications: game.assignedMessages[player.playerName]
+          words: gameOverview.game.words,
+          indications: gameOverview.game.assignedMessages[player.playerName]
         };
         player.socket.emit('data', data);
       }); 

@@ -1,25 +1,25 @@
-const { words } = require("../utils/bdd.js");
+const { ALL_WORDS } = require("../utils/bdd.js");
 const difficulty = 0;
 
 exports.Game = class Game {
     constructor(players) {
         this.players = players;
-        this.words = words;
         this.nbPlayers = players.length;
+        this.words = [];
         this.assignedWords = {};
         this.assignedMessages = {};
         this.assign_words();
-        assign_messages();
+        this.assign_messages();
     }
 
-    static assign_words() {
-        for (player in this.players){
-            const word = words[this.random()]
-            assignedWords.player = word
-            this.words.append(word)
-        }
+    assign_words() {
+        this.players.forEach((player, _) => {
+            const word = ALL_WORDS[this.random()];
+            this.assignedWords.player = word;
+            this.words.push(word);
+        });
     }
-    static assign_messages() {
+    assign_messages() {
         this.players.forEach((player, i) => {
             if (difficulty == 0) {
                 // Target next player
@@ -29,27 +29,30 @@ exports.Game = class Game {
                 } else {
                     nextPlayer = this.players[i + 1];
                 }
-                assignedMessages.player = [{
+                this.assignedMessages.player = [{
                     "player": nextPlayer,
-                    "word": assignedWords[nextPlayer]
+                    "word": this.assignedWords[nextPlayer]
                 }]
             } else {
                 // Target random player
                 const random_player = this.players[this.random(this.nbPlayers)]
-                if (assignedMessages[random_player] === undefined){
-                    assignedMessages[random_player] = [];
+                if (this.assignedMessages[random_player] === undefined){
+                    this.assignedMessages[random_player] = [];
                 }
-                assignedMessages.player.append({
+                this.assignedMessages.player.push({
                     "player": random_player,
-                    "word": assignedWords[random_player]
+                    "word": this.assignedWords[random_player]
                 }) 
             }
         });
     }
-    static random(i=words.length) {
+    random(i=ALL_WORDS.length) {
         return Math.floor(Math.random() * i);
     }
-    static refresh(){
+    refresh(){
+        this.words = [];
+        this.assignedWords = {};
+        this.assignedMessages = {};
         this.assign_words();
         this.assign_messages();
     }

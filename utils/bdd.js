@@ -1,4 +1,4 @@
-exports.words = [
+exports.ALL_WORDS = [
     "chat",
     "rat",
     "chameau",
