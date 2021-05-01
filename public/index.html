@@ -9,19 +9,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/static/css/styles.css">
-    <link rel="stylesheet" href="/static/css/wainting-room.css">
+    <link rel="stylesheet" href="/static/css/waiting-room.css">
     <link rel="stylesheet" href="/static/css/progress.css">
 
     <link rel="stylesheet" href="/static/css/particle.css">
 
     <title>A Little World</title>
+    <script type="text/javascript" src="/static/src/progress.js" defer></script>
+    <script type="text/javascript" src="/static/src/particle.js" defer></script>
 
     <script type="text/javascript" src="/socket.io/socket.io.js" defer></script>
     <script type="text/javascript" src="/static/src/main.js" defer></script>
     <script type="text/javascript" src="/static/src/connecter.js" defer></script>
 
-    <script type="text/javascript" src="/static/src/particle.js" defer></script>
-    <script type="text/javascript" src="/static/src/progress.js" defer></script>
   </head>
   <body>
     <div id="waiting-room">
@@ -35,7 +35,7 @@
     <div class="hidden" id="score-dashboard">
       <h1>Dashboard</h1>
       <div id="scores">
-        
+
       </div>
     </div>
 
@@ -72,11 +72,10 @@
         <button type="button" name="button">
           Word
         </button>
-      </div>
-
-      <div id="progress">
-        <div id="bar"></div>
-      </div>
+      </div>    
+    </div>
+    <div id="progress">
+      <div id="bar"></div>
     </div>
 
   </body>

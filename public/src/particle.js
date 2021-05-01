@@ -22,12 +22,3 @@ function shakeScreen() {
 
 
 document.querySelector("div#words").addEventListener("click", clicked);
-
-socket.on("result", (result) => {
-  if (result === true) {
-    console.log("Good game");
-  } else if (result === false) {
-    console.log("Bad game");
-    shakeScreen();
-  };
-});

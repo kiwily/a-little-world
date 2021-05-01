@@ -1,18 +1,6 @@
-let i = 0;
-function move() {
-  if (i === 0) {
-    i = 1;
-    const bar = document.querySelector("div#progress div#bar");
-    let width = 100;
-    const frameId = setInterval(frame, 10);
-    function frame() {
-      if (width <= 0) {
-        clearInterval(frameId);
-        i = 0;
-      } else {
-        width -= 1;
-        bar.style.width = `${width}%`;
-      };
-    };
-  };
+const bar = document.querySelector("div#progress div#bar");
+
+function moveBar(i, base) {
+  // Update bar to i / base %
+  bar.style.width = `${100 * i / base}%`;
 };

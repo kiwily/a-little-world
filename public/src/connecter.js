@@ -42,11 +42,19 @@ socket.on('finish', ({players}) => {
 socket.on('data', ({ indications, words, counter, position }) => {
   updateIndications(indications);
   updateWords(words);
-  const time = counter;
-  console.log(time)
+  moveBar(counter, 60);
   console.log(position)
 });
 
 wordsDiv.addEventListener("click", (event) => {
   socket.emit("tentative", event.target.textContent);
+});
+
+socket.on("result", (result) => {
+  if (result === true) {
+    console.log("Good game");
+  } else if (result === false) {
+    console.log("Bad game");
+    shakeScreen();
+  };
 });
