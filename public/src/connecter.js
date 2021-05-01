@@ -3,7 +3,7 @@ const readyForm = document.querySelector("div#waiting-room form");
 const nameText = document.querySelector("div#waiting-room h2");
 const scoresDiv = document.querySelector("div#scores");
 
-// Telling 
+// Telling the server that we arrived in the waiting room
 socket.emit('join');
 // When submitting the player name and stating ourself as ready
 readyForm.addEventListener("submit", (event) => {
@@ -25,8 +25,11 @@ readyForm.addEventListener("submit", (event) => {
 socket.on('start', () => {
   document.querySelector("div#waiting-room").setAttribute("class", "hidden");
 });
-socket.on('start', () => {
-  document.querySelector("div#waiting-room").setAttribute("class", "hidden");
+socket.on('new-player', () => {
+   console.log("NEW PLAYER TO AFFICHE")
+});
+socket.on('new-player-name', (name) => {
+   console.log("AFFICHE PLAYER NAME TO AFFICHE (and remove one from the non named ones)", name)
 });
 
 socket.on('finish', ({players}) => {

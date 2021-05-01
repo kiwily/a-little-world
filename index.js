@@ -79,9 +79,13 @@ io.on('connection', (socket) => {
     });
     // If player is ready update it and check if all players are ready
     socket.on('ready', (playerName) => {
+        
         if (games[partieId] === undefined) {
           return;
         };
+        Object.values(games[partieId].players).forEach(player => {
+            player.socket.emit('new-player-name', playerName);
+        });
         playerNameToSocketId[playerName] = socket.id;
         games[partieId].players[socket.id].ready = true;
         games[partieId].players[socket.id].playerName = playerName;
