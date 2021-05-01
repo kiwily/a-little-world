@@ -6,9 +6,11 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" href="/static/css/wainting-room.css">
+    <link rel="stylesheet" href="/static/css/info.css">
 
     <link rel="stylesheet" href="/static/css/particle.css">
 
@@ -21,7 +23,7 @@
     <script type="text/javascript" src="/static/src/particle.js" defer></script>
   </head>
   <body>
-    <div id="waiting-room">
+    <div class="hidden" id="waiting-room">
       <h1>Waiting for others ...</h1>
       <form action="/join-game" method="POST">
         <input required type="text" name="player-name"/>
@@ -64,6 +66,16 @@
           Word
         </button>
 
+      </div>
+
+    </div>
+
+    <div id="info">
+      <div id="timer">
+        55
+      </div>
+      <div id="position">
+        2
       </div>
     </div>
   </body>
