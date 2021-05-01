@@ -10,11 +10,12 @@ socket.on('start', () => {
 
 socket.on('data', (data) => {
   console.log("receiving", data)
-  updateQuestions(data.words);
-  updateWords(data.questions);
+  updateIndications(data.indications);
+  updateWords(data.words);
 });
 
 function updateWords(words) {
+  console.log("update word ", words);
   words.forEach((word, _) => {
     console.log("Question word ", word);
     let question = document.getElementById("question");
@@ -26,11 +27,12 @@ function updateWords(words) {
   });
 };
 
-function updateQuestions(questions) {
-  questions.forEach((question, _) => {
+function updateIndications(indications) {
+  console.log("update indic ", indications);
+  indications.forEach((indication, _) => {
     let word = document.getElementById("word");
     let div = document.createElement('div');
-    div.textContent = "Make " + question[0] + " Guess " + question[1];
+    div.textContent = "Make " + indication.player + " Guess " + indication.word;
     word.append(div);
   });
 };

@@ -15,7 +15,7 @@ exports.Game = class Game {
     assign_words() {
         this.players.forEach((player, _) => {
             const word = ALL_WORDS[this.random()];
-            this.assignedWords.player = word;
+            this.assignedWords[player] = word;
             this.words.push(word);
         });
     }
@@ -24,12 +24,12 @@ exports.Game = class Game {
             if (difficulty == 0) {
                 // Target next player
                 let nextPlayer;
-                if (i + 1 > this.nbPlayers) {
+                if (i + 1 >= this.nbPlayers) {
                     nextPlayer = this.players[0];
                 } else {
                     nextPlayer = this.players[i + 1];
                 }
-                this.assignedMessages.player = [{
+                this.assignedMessages[player] = [{
                     "player": nextPlayer,
                     "word": this.assignedWords[nextPlayer]
                 }]
