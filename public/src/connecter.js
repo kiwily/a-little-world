@@ -41,7 +41,7 @@ socket.on('waiting-update', (players) => {
     } else {
       div.textContent = playerName + " is waiting with you";
     }
-    scoresDiv.append(div);
+    usersDiv.append(div);
   });
 });
 

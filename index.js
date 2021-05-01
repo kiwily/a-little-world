@@ -73,7 +73,10 @@ io.on('connection', (socket) => {
             score: 0,
             position: 0
         }
-        const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
+        const playerNames = Object.values(games[partieId].players).map(x => { return {
+            "playerName": x.playerName,
+            "ready": x.ready
+        }});
         Object.values(games[partieId].players).forEach(player => {
             player.socket.emit('waiting-update', playerNames);
         });
@@ -84,13 +87,17 @@ io.on('connection', (socket) => {
         if (games[partieId] === undefined) {
           return;
         };
-        const playerNames = Object.values(games[partieId].players).map(x => x.playerName);
-        Object.values(games[partieId].players).forEach(player => {
-            player.socket.emit('waiting-update', playerNames);
-        });
         playerNameToSocketId[playerName] = socket.id;
         games[partieId].players[socket.id].ready = true;
         games[partieId].players[socket.id].playerName = playerName;
+        const playerNames = Object.values(games[partieId].players).map(x => { return {
+            "playerName": x.playerName,
+            "ready": x.ready
+        }});
+        console.log(playerNames)
+        Object.values(games[partieId].players).forEach(player => {
+            player.socket.emit('waiting-update', playerNames);
+        });
         // Test if everyone is ready
         let allReady = true;
         Object.values(games[partieId].players).forEach((player, _) => {
