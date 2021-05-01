@@ -4,16 +4,16 @@ function clicked(event) {
     return;
   };
 
-  if (clickedTimeout[event.target] !== undefined) {
+  if (clickedTimeout[event.target.textContent] !== undefined) {
     return;
   };
   socket.emit("tentative", event.target.textContent);
 
   event.target.setAttribute("class", "particle");
-  clickedTimeout[event.target] = setTimeout(() => {
+  clickedTimeout[event.target.textContent] = setTimeout(() => {
     if (event !== undefined) {
       event.target.setAttribute("class", "");
-      clickedTimeout[event.target] = undefined;
+      clickedTimeout[event.target.textContent] = undefined;
     };
   }, 500);
 };

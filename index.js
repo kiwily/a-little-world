@@ -10,7 +10,7 @@ const { Console } = require('console');
 const { resolve } = require('path');
 
 const PORT = 3000;
-const TIMING = 2;
+const TIMING = 60;
 const ERRORS = {
     "1": 'Cannot join a started game.',
     "2": 'This game name is undefined.'
@@ -174,6 +174,9 @@ function loop() {
             if (is_ended) {
                 const data = {
                     players: Object.values(gameOverview.players).map(p => {
+                      if (p=== undefined) {
+                        return;
+                      };
                         return {
                             "playerName": p.playerName,
                             "score": p.score,
