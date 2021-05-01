@@ -1,12 +1,9 @@
 const socket = io();
 
-var button = document.getElementById("button");
-button.addEventListener("click", clickButton);
-
-function clickButton() {
-  io.emit('value of the button', button.value);
-  button.value = '';
+function clickButton(event) {
+  io.emit('value of the button', this.textContent);
 }
+
 var pauseView = document.getElementById('pause');
 var gameView = document.getElementById('game');
 gameView.visible = false;
@@ -32,6 +29,7 @@ function updateWords(words) {
     button.type = "button";
     button.name = "button";
     question.append(button);
+    button.addEventListener("click", clickButton);
   });
 };
 
