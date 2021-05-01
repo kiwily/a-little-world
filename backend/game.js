@@ -49,6 +49,10 @@ exports.Game = class Game {
     static random(i=words.length) {
         return Math.floor(Math.random() * i);
     }
+    static refresh(){
+        this.assign_words();
+        this.assign_messages();
+    }
 }
 // Envoyer le nom
 // Envoyer les donnees

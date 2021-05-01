@@ -39,8 +39,6 @@ io.on('connection', (socket) => {
     console.log("[\x1b[32m+\x1b[0m] User connected\x1b[33m", socket.id, "\x1b[0m");
     const partieId = socket.handshake.headers.referer.split("/").pop();
     // Add a new player to the game
-    console.log("games", games)
-    console.log("partie", partieId)
     socket.on('join', () => {
         games[partieId].players[socket.id] = {
             socket,
@@ -50,30 +48,28 @@ io.on('connection', (socket) => {
         console.log(games)
     });
     // If player is ready update it and check if all players are ready
-    socket.on('ready', () => {
+    socket.on('ready', (playerName) => {
       games[partieId].players[socket.id].ready = true;
-      const playerIds = games[partieId].players.map(x => x.playerName);
-      console.log("player ids", playerIds)
+      games[partieId].players[socket.id].playerName = playerName;
+      // Test if everyone is ready
       let allReady = true;
       Object.values(games[partieId].players).forEach((player, _) => {
         allReady = allReady && player.ready
       })
       // All players are ready: start game
       if (allReady){
+        const playerNames = games[partieId].players.map(x => x.playerName);
         games[partieId].started = true;
-        games[partieId].game = new Game(playerIds)
+        games[partieId].game = new Game(playerNames)
       }
     });
-    socket.on('Join a current game', (msg) => {
-        // if (listGame.includes(msg)) {
-        // }
-    });
+    
     socket.on('disconnect', () => {
         console.log("[\x1b[31m-\x1b[0m] User disconnected\x1b[33m", socket.id, "\x1b[0m");
     });
 });
 
-const id = setInterval(loop, 2000);
+const id = setInterval(loop, 5000);
 
 server.listen(PORT, () => {
   console.log(`listening on :${PORT}`);
@@ -84,6 +80,7 @@ function loop() {
   Object.values(games).forEach((game) => {
     // Only if game is playing
     if (game.started){
+      game.game.refresh();
       // Each player receives different info
       Object.values(game.players).forEach((player) => {
         const data = {

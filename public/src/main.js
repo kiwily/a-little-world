@@ -1,11 +1,6 @@
 const socket = io();
 
 
-function clickButton() {
-  socket.emit('value of the button', button.value);
-  button.value = '';
-}
-
 socket.emit('join', {});
 
 socket.on('start', () => {
