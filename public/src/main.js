@@ -6,7 +6,7 @@ function clickButton() {
   button.value = '';
 }
 
-socket.emit('join');
+socket.emit('join', {});
 
 socket.on('start', () => {
     pauseView.className = "invisible";
@@ -14,6 +14,7 @@ socket.on('start', () => {
 });
 
 socket.on('data', (data) => {
+  console.log("receiving", data)
   updateQuestions(data.words);
   updateWords(data.questions);
 });

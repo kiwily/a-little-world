@@ -4,6 +4,7 @@ const difficulty = 0;
 exports.Game = class Game {
     constructor(players) {
         this.players = players;
+        this.words = words;
         this.nbPlayers = players.length;
         this.assignedWords = {};
         this.assignedMessages = {};
@@ -13,7 +14,9 @@ exports.Game = class Game {
 
     static assign_words() {
         for (player in this.players){
-            assignedWords.player = words[this.random()]
+            const word = words[this.random()]
+            assignedWords.player = word
+            this.words.append(word)
         }
     }
     static assign_messages() {
