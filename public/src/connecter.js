@@ -11,6 +11,7 @@ const templateLine = dashboardTable.querySelector("tr:nth-child(2)").cloneNode(t
 socket.emit('join');
 // When submitting the player name and stating ourself as ready
 readyForm.addEventListener("submit", (event) => {
+  event.preventDefault();
   const data = new FormData(event.target);
 
   const playerName = data.get("player-name");
@@ -21,8 +22,6 @@ readyForm.addEventListener("submit", (event) => {
   readyForm.setAttribute("class", "hidden");
   nameText.setAttribute("class", "");
   nameText.textContent = playerName;
-
-  event.preventDefault();
 });
 
 
@@ -70,10 +69,6 @@ socket.on('data', ({ indications, words, counter, position }) => {
   updateIndications(indications);
   updateWords(words);
   moveBar(counter, 60);
-});
-
-wordsDiv.addEventListener("click", (event) => {
-  socket.emit("tentative", event.target.textContent);
 });
 
 socket.on("result", (result) => {

@@ -1,5 +1,7 @@
 #words button.particle {
   background-color: transparent;
+
+  transform: scale3d(0.7, 0.9, 0);
 }
 
 #main.shake {

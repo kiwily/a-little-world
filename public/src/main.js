@@ -1,9 +1,22 @@
 const wordsDiv = document.querySelector("div#words");
 const indicationsDiv = document.querySelector("div#indications");
+
+let updateWordsId = undefined;
 function updateWords(words) {
+  if (updateWordsId !== undefined) {
+    clearTimeout(updateWordsId);
+    updateWordsId = undefined;
+  };
+
+  const clickedValues = Object.values(clickedTimeout)
+  if (clickedValues.length > 0 && clickedValues[0] !== undefined) {
+    updateWordsId = setTimeout((_) => {updateWords(words)}, 50);
+    return;
+  };
+
   while (wordsDiv.firstChild) {
     wordsDiv.removeChild(wordsDiv.firstChild);
-  }
+  };
 
   words.forEach((word, _) => {
     const question = document.getElementById("words");
@@ -11,7 +24,7 @@ function updateWords(words) {
     button.textContent = word;
     button.type = "button";
     button.name = "button";
-    question.append(button);
+    question.appendChild(button);
   });
 };
 
@@ -23,7 +36,7 @@ function updateIndications(indications) {
   indications.forEach((indication, _) => {
     const word = document.getElementById("indications");
     const div = document.createElement('div');
-    div.textContent = "Make " + indication.playerName + " Guess " + indication.word;
-    word.append(div);
+    div.textContent = "Make " + indication.player + " Guess " + indication.word;
+    word.appendChild(div);
   });
 };

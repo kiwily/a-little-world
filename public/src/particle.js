@@ -1,8 +1,20 @@
+const clickedTimeout = {}
 function clicked(event) {
+  if (event.target.tagName.toLowerCase() !== "button") {
+    return;
+  };
+
+  if (clickedTimeout[event.target] !== undefined) {
+    return;
+  };
+
+  socket.emit("tentative", event.target.textContent);
+
   event.target.setAttribute("class", "particle");
-  setTimeout(() => {
+  clickedTimeout[event.target] = setTimeout(() => {
     if (event !== undefined) {
       event.target.setAttribute("class", "");
+      clickedTimeout[event.target] = undefined;
     };
   }, 500);
 };

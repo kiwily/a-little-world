@@ -10,7 +10,7 @@ const { Console } = require('console');
 const { resolve } = require('path');
 
 const PORT = 3000;
-const TIMING = 5;
+const TIMING = 60;
 const ERRORS = {
     "1": 'Cannot join a started game.',
     "2": 'This game name is undefined.'
@@ -124,7 +124,7 @@ io.on('connection', (socket) => {
         };
         const playerName = games[partieId].players[socket.id].playerName;
         const result = games[partieId].game.assignedWords[playerName] === word;
-        
+
         const teammate = games[partieId].players[playerNameToSocketId[games[partieId].game.assignedHelper[playerName]]];
         if (result) {
             games[partieId].players[socket.id].score += 1;
@@ -133,7 +133,7 @@ io.on('connection', (socket) => {
         } else {
             games[partieId].players[socket.id].score -= 1;
         }
-        
+
         socket.emit("result", result)
     });
 
