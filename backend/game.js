@@ -15,11 +15,44 @@ exports.Game = class Game {
 
     assign_words() {
         this.players.forEach((player, _) => {
-            const word = ALL_WORDS[this.random()];
+            let word = ALL_WORDS[this.random()];
+            while (this.words.includes(word)) {
+              word = ALL_WORDS[this.random()];
+            };
             this.assignedWords[player] = word;
             this.words.push(word);
         });
-    }
+    };
+
+    getWords(word) {
+      // Less than 4 words
+      if (this.words.length <= 4) {
+        const words = [...this.words];
+
+        // Fill rest with random from BDD
+        while (words.length < 4) {
+          let word = ALL_WORDS[this.random()];
+          while (words.includes(word)) {
+            word = ALL_WORDS[this.random()];
+          };
+          words.push(word)
+        }
+        return words;
+      };
+
+      //More than 4 players
+      const words = [word];
+      for (let i = 0; i < 3; i++) {
+        // Take random from player word
+        let word = this.words[this.random(this.words.length)];
+        while (words.includes(word)) {
+          word = this.words[this.random(this.words.length)];
+        };
+        words.push(word)
+      };
+      return words;
+    };
+
     assign_messages() {
         this.players.forEach((player, i) => {
             if (difficulty == 0) {

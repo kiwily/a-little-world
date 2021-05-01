@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.render('hub', { title: 'Hey', message: 'Hello there!' });
 });
 
-app.post('/join-game', (req, res) => {
+app.post('/', (req, res) => {
   const game = req.body["join-game"];
   if (games[game] === undefined) {
     games[game] = {
@@ -30,7 +30,6 @@ app.post('/join-game', (req, res) => {
       game: null
     }
   } else if (games[game].started){
-      res.body.error = "lol"
     res.redirect(`/`);
   }
   res.redirect(`/game/${req.body["join-game"]}`);
@@ -52,6 +51,9 @@ io.on('connection', (socket) => {
     const partieId = socket.handshake.headers.referer.split("/").pop();
     // Add a new player to the game
     socket.on('join', () => {
+        if (games[partieId] === undefined) {
+          return;
+        };
         games[partieId].players[socket.id] = {
             socket,
             playerName: socket.id,
@@ -61,6 +63,9 @@ io.on('connection', (socket) => {
     });
     // If player is ready update it and check if all players are ready
     socket.on('ready', (playerName) => {
+        if (games[partieId] === undefined) {
+          return;
+        };
         playerNameToSocketId[playerName] = socket.id;
         games[partieId].players[socket.id].ready = true;
         games[partieId].players[socket.id].playerName = playerName;
@@ -82,15 +87,17 @@ io.on('connection', (socket) => {
     });
 
     socket.on('tentative', (word) => {
+        if (games[partieId] === undefined) {
+          return;
+        };
         const playerName = games[partieId].players[socket.id].playerName;
         const result = games[partieId].game.assignedWords[playerName] === word;
         const teammate = games[partieId].players[playerNameToSocketId[games[partieId].game.assignedHelper[playerName]]];
         if (result) {
-            games[partieId].players[socket.id].score ++;
-            teammate.score ++;
+            games[partieId].players[socket.id].score += 1;
+            teammate.score += 2;
         } else {
-            games[partieId].players[socket.id].score --;
-            teammate.score --;
+            games[partieId].players[socket.id].score -= 1;
         }
         console.log(games[partieId].players[socket.id].score)
         socket.emit("result", result)
@@ -116,7 +123,7 @@ function loop() {
       // Each player receives different info
       Object.values(gameOverview.players).forEach((player) => {
         const data = {
-          words: gameOverview.game.words,
+          words: gameOverview.game.getWords(gameOverview.game.assignedWords[player.playerName]),
           indications: gameOverview.game.assignedMessages[player.playerName]
         };
         player.socket.emit('data', data);

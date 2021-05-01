@@ -8,6 +8,6 @@ head
   link(rel='stylesheet' href='/static/css/hub.css')
   title Wainting Room
 #main
-  form#hub(action='/join-game' method='POST')
-    input(required='' type='text' name='join-game')
+  form#hub(action='/' method='POST')
+    input(required type='text' name='join-game')
     button(type='submit') Join game
