@@ -17,27 +17,23 @@ const listGame = [];
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/static', express.static(path.join(__dirname, "public")));
-app.get('/hub', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, "public", "hub.html"));
 });
-app.post('/createGame', (req, res) => {
-  listGame.push(req.body.nameNewGame);
-  res.redirect('/game/'+req.body.nameNewGame);
-});
-app.post('/joinGame', (req, res) => {
+
+app.post('/join-game', (req, res) => {
   if (listGame.includes(req.body.nameNewGame)) {
-    res.redirect('/game/'+req.body.nameNewGame);
+    res.redirect(`/game/${req.body["join-game"]}`);
   }
   else{
-    res.redirect('/hub');
-  }
+    listGame.push(req.body.nameNewGame);
+    res.redirect(`/game/${req.body["join-game"]}`);
+  };
 });
 app.get('/game/:gameId', (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+
 
 
 sockets(server)
