@@ -3,6 +3,8 @@
 *::before,
 *::after {
   box-sizing: border-box;
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 *:focus {
   outline: 3px dashed #228bec;
@@ -120,11 +122,12 @@ body {
   cursor: pointer;
 
   box-sizing: border-box;
-  transition-duration: 0.4s;
 
   cursor: pointer;
   background-color: #C2EABA;
   border: 2px solid #C2EABA;
+
+  transition: 0.2s ease-in-out;
 
   -webkit-appearance: none;
 
@@ -135,4 +138,8 @@ body {
 
 #question button:hover {
   background-color: transparent;
+}
+
+#question button:active {
+  transform: scale(0.8);
 }
