@@ -1,6 +1,5 @@
 const wordsDiv = document.querySelector("div#words");
 const indicationsDiv = document.querySelector("div#indications");
-
 function updateWords(words) {
   while (wordsDiv.firstChild) {
     wordsDiv.removeChild(wordsDiv.firstChild);

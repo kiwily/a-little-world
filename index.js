@@ -28,8 +28,8 @@ app.post('/join-game', (req, res) => {
       game: null
     }
   } else if (games[game].started){
-    res.status(400).send("Error, game already playing");
-    res.end();
+      res.body.error = "lol"
+    res.redirect(`/`);
   }
   res.redirect(`/game/${req.body["join-game"]}`);
 });
