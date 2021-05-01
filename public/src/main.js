@@ -1,23 +1,12 @@
-const socket = io();
-
-
-socket.emit('join', {});
-
-socket.on('start', () => {
-    pauseView.className = "invisible";
-    gameView.className = "";
-});
-
-socket.on('data', (data) => {
-  console.log("receiving", data)
-  updateIndications(data.indications);
-  updateWords(data.words);
-});
+const wordsDiv = document.querySelector("div#words");
+const indicationsDiv = document.querySelector("div#indications");
 
 function updateWords(words) {
-  console.log("update word ", words);
+  while (wordsDiv.firstChild) {
+    wordsDiv.removeChild(wordsDiv.firstChild);
+  }
+
   words.forEach((word, _) => {
-    console.log("Question word ", word);
     let question = document.getElementById("words");
     let button = document.createElement('button');
     button.textContent = word;
@@ -28,7 +17,10 @@ function updateWords(words) {
 };
 
 function updateIndications(indications) {
-  console.log("update indic ", indications);
+  while (indicationsDiv.firstChild) {
+    indicationsDiv.removeChild(indicationsDiv.firstChild);
+  }
+
   indications.forEach((indication, _) => {
     let word = document.getElementById("indications");
     let div = document.createElement('div');

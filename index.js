@@ -24,9 +24,8 @@ app.post('/join-game', (req, res) => {
       started: false,
       game: null
     }
-    console.log("joining id", games)
-    res.redirect(`/game/${req.body["join-game"]}`);
   }
+  res.redirect(`/game/${req.body["join-game"]}`);
 });
 app.get('/game/:gameId', (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
@@ -63,7 +62,7 @@ io.on('connection', (socket) => {
         games[partieId].game = new Game(playerNames)
         
         Object.values(games[partieId].players).forEach(player => {
-          player.socket.emit('playing');
+          player.socket.emit('start');
         });
       }
     });
