@@ -3,6 +3,9 @@ const readyForm = document.querySelector("div#waiting-room form");
 const nameText = document.querySelector("div#waiting-room h2");
 const scoresDiv = document.querySelector("div#scores");
 
+// Telling 
+socket.emit('join');
+// When submitting the player name and stating ourself as ready
 readyForm.addEventListener("submit", (event) => {
   const data = new FormData(event.target);
 
@@ -17,8 +20,11 @@ readyForm.addEventListener("submit", (event) => {
 
   event.preventDefault();
 });
-socket.emit('join');
 
+
+socket.on('start', () => {
+  document.querySelector("div#waiting-room").setAttribute("class", "hidden");
+});
 socket.on('start', () => {
   document.querySelector("div#waiting-room").setAttribute("class", "hidden");
 });

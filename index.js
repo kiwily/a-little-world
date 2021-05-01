@@ -39,6 +39,7 @@ app.post('/', (req, res) => {
       game: null,
       counter: TIMING
     }
+    res.redirect(`/game/${req.body["join-game"]}`);
   } else if (games[game].started){
     res.redirect("/?e=1")
   } else {
@@ -72,6 +73,9 @@ io.on('connection', (socket) => {
             score: 0,
             position: 0
         }
+        Object.values(games[partieId].players).forEach(player => {
+            player.socket.emit('new-player');
+        });
     });
     // If player is ready update it and check if all players are ready
     socket.on('ready', (playerName) => {
