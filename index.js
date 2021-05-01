@@ -9,7 +9,7 @@ const { BidirectionalObject } = require("./utils/BidirectionalObject");
 const { Console } = require('console');
 
 const PORT = 3000;
-const TIMING = 5;
+const TIMING = 60;
 
 const app = express();
 const server = http.createServer(app);
