@@ -6,9 +6,9 @@ const { Server } = require("socket.io");
 const { Game } = require("./backend/game.js");
 
 const { BidirectionalObject } = require("./utils/BidirectionalObject");
+const { Console } = require('console');
 
 const PORT = 3000;
-const REFRESH_RATE = 4;
 
 const app = express();
 const server = http.createServer(app);
@@ -61,7 +61,8 @@ io.on('connection', (socket) => {
             socket,
             playerName: socket.id,
             ready: false,
-            score: 0
+            score: 0,
+            position: 0
         }
     });
     // If player is ready update it and check if all players are ready
@@ -75,6 +76,7 @@ io.on('connection', (socket) => {
         // Test if everyone is ready
         let allReady = true;
         Object.values(games[partieId].players).forEach((player, _) => {
+            console.log("ready", allReady, player.ready);
             allReady = allReady && player.ready
         })
         // All players are ready: start game
@@ -84,9 +86,9 @@ io.on('connection', (socket) => {
             games[partieId].game = new Game(playerNames)
 
             Object.values(games[partieId].players).forEach(player => {
-            player.socket.emit('start');
-        });
-      }
+                player.socket.emit('start');
+            });
+        }
     });
 
     socket.on('tentative', (word) => {
@@ -95,6 +97,7 @@ io.on('connection', (socket) => {
         };
         const playerName = games[partieId].players[socket.id].playerName;
         const result = games[partieId].game.assignedWords[playerName] === word;
+        console.log("TENTATIVE", word, games[partieId].game.assignedWords)
         const teammate = games[partieId].players[playerNameToSocketId[games[partieId].game.assignedHelper[playerName]]];
         if (result) {
             games[partieId].players[socket.id].score += 1;
@@ -123,33 +126,39 @@ function loop() {
   Object.values(games).forEach((gameOverview) => {
     // Only if game is playing
     if (gameOverview.started){
-      gameOverview.counter --;
-      const is_ended = gameOverview.counter <= 0;
-      const scoreDict = {}
-      Object.values(gameOverview.players).forEach(({ playerName, score }) => {
-            scoreDict[score] = playerName;
-      });
-      Object.keys(scoreDict).sort().forEach((score, i) => {
-            const playerName = scoreDict[score]
-            gameOverview.players[playerName].position = i + 1;
-      });
-      // Each player receives different info
-      Object.values(gameOverview.players).forEach(({ socket, playerName, position }) => {
-          if (is_ended) {
-            const data = {
-                words: gameOverview.game.getWords(gameOverview.game.assignedWords[player.playerName]),
-                indications: gameOverview.game.assignedMessages[playerName],
-                counter: gameOverview.counter,
-                position
-            };
-            socket.emit('data', data);
-          } else {
-            const data = {
-              players: gameOverview.players
-            };
-            socket.emit('end', data);
-          }
-      });
+        gameOverview.counter -= 1;
+        const is_ended = (gameOverview.counter <= 0);
+        const scoreDict = {};
+        Object.values(gameOverview.players).forEach(({ playerName, score }) => {
+                scoreDict[score] = playerName;
+        });
+        Object.keys(scoreDict).sort().forEach((score, i) => {
+                const playerName = scoreDict[score]
+                gameOverview.players[playerNameToSocketId[playerName]].position = i + 1;
+        });
+        // Each player receives different info
+        Object.values(gameOverview.players).forEach(({ socket, playerName, position }) => {
+            if (is_ended) {
+                const data = {
+                    players: Object.values(gameOverview.players).map(p => {
+                        p.playerName,
+                        p.score,
+                        p.position
+                    })
+                };
+                socket.emit('finish', data);
+                console.log("DISCONNECTED")
+                socket.disconnect();
+            } else {
+                const data = {
+                    words: gameOverview.game.possibleWords[playerName],
+                    indications: gameOverview.game.assignedMessages[playerName],
+                    counter: gameOverview.counter,
+                    position
+                };
+                socket.emit('data', data);
+            }
+        });
     }
   });
 }

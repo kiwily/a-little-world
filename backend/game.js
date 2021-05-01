@@ -9,11 +9,14 @@ exports.Game = class Game {
         this.assignedWords = {};
         this.assignedMessages = {};
         this.assignedHelper = {};
-        this.assign_words();
-        this.assign_messages();
+        this.possibleWords = {};
+        this.assignWords();
+        this.assignMessages();
+        this.assignPossibleWords();
+        console.log("FIN")
     }
 
-    assign_words() {
+    assignWords() {
         this.players.forEach((player, _) => {
             let word = ALL_WORDS[this.random()];
             while (this.words.includes(word)) {
@@ -24,36 +27,43 @@ exports.Game = class Game {
         });
     };
 
-    getWords(word) {
-      // Less than 4 words
-      if (this.words.length <= 4) {
-        const words = [...this.words];
+    assignPossibleWords() {
+        this.players.forEach((player, _) => {
+            console.log(1)
+            // Less than 4 words
+            if (this.words.length <= 4) {
+                console.log(2)
+                const words = [...this.words];
 
-        // Fill rest with random from BDD
-        while (words.length < 4) {
-          let word = ALL_WORDS[this.random()];
-          while (words.includes(word)) {
-            word = ALL_WORDS[this.random()];
-          };
-          words.push(word)
-        }
-        return words;
-      };
+                // Fill rest with random from BDD
+                while (words.length < 4) {
+                    console.log(3)
+                    let word = ALL_WORDS[this.random()];
+                    while (words.includes(word)) {
+                        console.log(4)
+                        word = ALL_WORDS[this.random()];
+                    };
+                    words.push(word)
+                }
+                console.log(5)
+                this.possibleWords[player] = words.sort(() => (Math.random() > 0.5)? 1 : -1 );
+            } else {
+                //More than 4 players
+                const words = [this.assignedWords[player]];
+                for (let i = 0; i < 3; i++) {
+                    // Take random from player word
+                    let word = this.words[this.random(this.words.length)];
+                    while (words.includes(word)) {
+                        word = this.words[this.random(this.words.length)];
+                    };
+                    words.push(word)
+                };
+                this.possibleWords[player] = words.sort(() => (Math.random() > 0.5)? 1 : -1 );
+            }
+        });
+    }
 
-      //More than 4 players
-      const words = [word];
-      for (let i = 0; i < 3; i++) {
-        // Take random from player word
-        let word = this.words[this.random(this.words.length)];
-        while (words.includes(word)) {
-          word = this.words[this.random(this.words.length)];
-        };
-        words.push(word)
-      };
-      return words;
-    };
-
-    assign_messages() {
+    assignMessages() {
         this.players.forEach((player, i) => {
             if (difficulty == 0) {
                 // Target next player
@@ -86,12 +96,14 @@ exports.Game = class Game {
         return Math.floor(Math.random() * i);
     }
     refresh(){
-        this.words = [];
+        this.words = []
+        this.possibleWords = {};
         this.assignedWords = {};
         this.assignedMessages = {};
         this.assignedHelper = {};
-        this.assign_words();
-        this.assign_messages();
+        this.assignWords();
+        this.assignMessages();
+        this.assignPossibleWords();
     }
 }
 // Envoyer le nom
