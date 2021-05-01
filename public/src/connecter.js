@@ -1,9 +1,12 @@
 const socket = io();
 const readyForm = document.querySelector("div#waiting-room form");
 const nameText = document.querySelector("div#waiting-room h2");
-const scoresDiv = document.querySelector("div#scores");
+const dashboardTable = document.querySelector("div#dashboard table");
 
-// Telling the server that we arrived in the waiting room
+const tableHeaders = dashboardTable.querySelector("tr:first-child").cloneNode(true);
+const templateLine = dashboardTable.querySelector("tr:nth-child(2)").cloneNode(true);
+
+// Telling
 socket.emit('join');
 // When submitting the player name and stating ourself as ready
 readyForm.addEventListener("submit", (event) => {
@@ -33,19 +36,24 @@ socket.on('new-player-name', (name) => {
 });
 
 socket.on('finish', ({players}) => {
-  while (scoresDiv.firstChild) {
-    scoresDiv.removeChild(scoresDiv.firstChild);
-  }
-  document.querySelector("div#score-dashboard").setAttribute("class", "");
-  let div = document.createElement('div');
-  div.textContent = "Player | Position | Score";
-  scoresDiv.append(div);
+  // Clear Table
+  while (dashboardTable.firstChild) {
+    dashboardTable.removeChild(dashboardTable.firstChild);
+  };
+  // Add Header
+  dashboardTable.appendChild(tableHeaders);
 
+  // Add Players Results
   Object.values(players).forEach(({ playerName, score, position}, _) => {
-    let div = document.createElement('div');
-    div.textContent = playerName + " | " + ('00' + position).slice(-1) + " | " + ('00' + score).slice(-3);
-    scoresDiv.append(div);
+    const tableRow = templateLine.cloneNode(true);
+    tableRow.querySelector("td:nth-child(1)").textContent = position;
+    tableRow.querySelector("td:nth-child(2)").textContent = playerName;
+    tableRow.querySelector("td:nth-child(3)").textContent = score;
+    dashboardTable.appendChild(tableRow);
   });
+
+  // Set visibility
+  document.querySelector("div#dashboard").setAttribute("class", "");
 });
 
 socket.on('data', ({ indications, words, counter, position }) => {

@@ -14,3 +14,26 @@ div#dashboard {
 
   font-family: 'Major Mono Display', monospace;
 }
+
+div#dashboard h1, div#dashboard table {
+  color: #E6EFE9
+}
+
+div#dashboard h1 {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+div#dashboard table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+div#dashboard table tr th, div#dashboard table tr td {
+  padding: 1rem;
+}
+
+div#dashboard table tr:first-child {
+  border-bottom: 2px solid #E6EFE9;
+}
