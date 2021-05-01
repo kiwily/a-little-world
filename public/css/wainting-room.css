@@ -1,0 +1,73 @@
+div#waiting-room {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(0, 0, 0, 0.8);
+
+  text-align: center;
+
+  font-family: 'Major Mono Display', monospace;
+}
+
+
+div#waiting-room h1, div#waiting-room button {
+  color: #E6EFE9
+}
+
+div#waiting-room form {
+  text-align: center;
+  margin: 0 auto;
+  height: 30vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: space-around;
+}
+
+div#waiting-room form input {
+  border:none;
+  background-image:none;
+  background-color:transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  border: 2px solid #8F8389;
+  background-color:#E6EFE9;
+
+  padding: 0.5rem;
+}
+
+div#waiting-room form input:focus {
+  border: 2px solid #A7C4A0;
+  outline: 0;
+
+}
+
+div#waiting-room form button {
+  box-sizing: border-box;
+
+  cursor: pointer;
+  background-color: #8F8389;
+  border: 2px solid #8F8389;
+
+  transition: 0.2s ease-in-out;
+
+  -webkit-appearance: none;
+
+  padding: 1rem;
+
+  text-align: center;
+}
+
+div#waiting-room form button:hover {
+  background-color: transparent;
+}

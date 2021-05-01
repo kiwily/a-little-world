@@ -5,6 +5,8 @@
   box-sizing: border-box;
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  overflow: hidden;
 }
 *:focus {
   outline: 3px dashed #228bec;
@@ -69,6 +71,11 @@ body {
   }
 }
 /*END RESETS*/
+/*START HIDDEN*/
+.hidden {
+  visibility: hidden;
+}
+/*END HIDDEN*/
 
 body {
   background-color: #E6EFE9;

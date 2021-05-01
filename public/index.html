@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/wainting-room.css">
     <title>A Little World</title>
 
     <script type="text/javascript" src="/socket.io/socket.io.js" defer></script>
@@ -15,18 +16,26 @@
     <script type="text/javascript" src="/static/src/main.js" defer></script>
   </head>
   <body>
+    <div id="waiting-room">
+      <h1>Waiting for others ...</h1>
+      <form action="/join-game" method="POST">
+        <input required type="text" name="player-name"/>
+        <button type="submit">Ready</button>
+      </form>
+    </div>
+
     <div id="main">
       <div id="indications">
 
         <div>
           <p>
-            Makes Adrien Guess Banana
+            Makes others guess word
           </p>
         </div>
 
         <div>
           <p>
-            Makes Tanguy Guess Table
+            Earn point when they guess or you guess your own
           </p>
         </div>
 
@@ -34,19 +43,19 @@
       <div id="words">
 
         <button type="button" name="button">
-          Banana
+          Guess
         </button>
 
         <button type="button" name="button">
-          Phone
+          Your
         </button>
 
         <button type="button" name="button">
-          Crips
+          Own
         </button>
 
         <button type="button" name="button">
-          Table
+          Word
         </button>
 
       </div>
