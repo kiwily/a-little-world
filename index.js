@@ -10,7 +10,7 @@ const { Console } = require('console');
 const { resolve } = require('path');
 
 const PORT = 3000;
-const TIMING = 60;
+const TIMING = 2;
 const ERRORS = {
     "1": 'Cannot join a started game.',
     "2": 'This game name is undefined.'
@@ -154,15 +154,23 @@ function loop() {
         gameOverview.counter -= 1;
         const is_ended = (gameOverview.counter < 0);
         const scoreDict = {};
-        Object.values(gameOverview.players).forEach(({ Id, score }) => {
-                scoreDict[score] = Id;
+        Object.values(gameOverview.players).forEach((player) => {
+              if (player === undefined) {
+                return;
+              };
+              const { Id, score } = player
+              scoreDict[score] = Id;
         });
         Object.keys(scoreDict).sort().forEach((score, i) => {
                 const Id = scoreDict[score]
                 gameOverview.players[Id].position = i + 1;
         });
         // Each player receives different info
-        Object.values(gameOverview.players).forEach(({ socket, playerName, position, Id }) => {
+        Object.values(gameOverview.players).forEach((player) => {
+            if (player === undefined) {
+              return;
+            };
+            const { socket, playerName, position, Id } = player
             if (is_ended) {
                 const data = {
                     players: Object.values(gameOverview.players).map(p => {
@@ -174,8 +182,9 @@ function loop() {
                     })
                 };
                 socket.emit('finish', data);
-                console.log("DISCONNECTED")
+                console.log("DISCONNECTED", player.Id);
                 socket.disconnect();
+                gameOverview.players[player.Id] = undefined;
             } else {
                 const data = {
                     words: gameOverview.game.possibleWords[Id],
