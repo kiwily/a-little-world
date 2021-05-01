@@ -9,6 +9,9 @@ const path = require("path");
 
 
 app.use('/static', express.static(path.join(__dirname, "public")));
+app.get('/hub', (req, res) => {
+  res.sendFile(path.join(__dirname, "hub.html"));
+});
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
