@@ -98,7 +98,6 @@ io.on('connection', (socket) => {
             "playerName": x.playerName,
             "ready": x.ready
         }});
-        console.log(playerNames)
         Object.values(games[partieId].players).forEach(player => {
             player.socket.emit('waiting-update', playerNames);
         });
@@ -106,7 +105,6 @@ io.on('connection', (socket) => {
         // Test if everyone is ready
         let allReady = true;
         Object.values(games[partieId].players).forEach(({ready}, _) => {
-            console.log("ready", allReady, ready);
             allReady = allReady && ready
         })
         // All players are ready: start game
@@ -126,7 +124,7 @@ io.on('connection', (socket) => {
         };
         const playerName = games[partieId].players[socket.id].playerName;
         const result = games[partieId].game.assignedWords[playerName] === word;
-        console.log("TENTATIVE", word, games[partieId].game.assignedWords)
+        
         const teammate = games[partieId].players[playerNameToSocketId[games[partieId].game.assignedHelper[playerName]]];
         if (result) {
             games[partieId].players[socket.id].score += 1;
@@ -135,7 +133,7 @@ io.on('connection', (socket) => {
         } else {
             games[partieId].players[socket.id].score -= 1;
         }
-        console.log(games[partieId].players[socket.id].score)
+        
         socket.emit("result", result)
     });
 

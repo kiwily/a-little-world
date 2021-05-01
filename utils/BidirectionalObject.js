@@ -27,12 +27,5 @@ class BidirectionalObject {
   };
 };
 
-// const a = new BidirectionalObject({a:1, b:2})
-// console.log("BidirectionalObject", a.keysToValues());
-// console.log("BidirectionalObject", a.valuesToKeys());
-// a.update({c:4, ...a.keysToValues()});
-// console.log("BidirectionalObject Update");
-// console.log("BidirectionalObject", a.keysToValues());
-// console.log("BidirectionalObject", a.valuesToKeys());
 
 exports.BidirectionalObject = BidirectionalObject;

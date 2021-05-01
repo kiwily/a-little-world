@@ -35,7 +35,7 @@ socket.on('waiting-update', (players) => {
   }
 
   Object.values(players).forEach(({playerName, ready}, _) => {
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     if (ready){
       div.textContent = playerName + " is Ready to play!";
     } else {
@@ -70,7 +70,6 @@ socket.on('data', ({ indications, words, counter, position }) => {
   updateIndications(indications);
   updateWords(words);
   moveBar(counter, 60);
-  console.log(position)
 });
 
 wordsDiv.addEventListener("click", (event) => {

@@ -6,8 +6,8 @@ function updateWords(words) {
   }
 
   words.forEach((word, _) => {
-    let question = document.getElementById("words");
-    let button = document.createElement('button');
+    const question = document.getElementById("words");
+    const button = document.createElement('button');
     button.textContent = word;
     button.type = "button";
     button.name = "button";
@@ -21,8 +21,8 @@ function updateIndications(indications) {
   }
 
   indications.forEach((indication, _) => {
-    let word = document.getElementById("indications");
-    let div = document.createElement('div');
+    const word = document.getElementById("indications");
+    const div = document.createElement('div');
     div.textContent = "Make " + indication.playerName + " Guess " + indication.word;
     word.append(div);
   });
