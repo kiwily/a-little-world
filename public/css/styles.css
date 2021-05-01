@@ -132,6 +132,7 @@ body {
   background-color: #C2EABA;
   border: 2px solid #C2EABA;
 
+  -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
 
   -webkit-appearance: none;
