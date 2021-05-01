@@ -19,7 +19,6 @@ const ERRORS = {
 const app = express();
 const server = http.createServer(app);
 const games = {};
-const playerNameToSocketId = {};
 
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({extended:true}));
@@ -91,7 +90,6 @@ io.on('connection', (socket) => {
         Object.values(games[partieId].players).forEach(player => {
             player.socket.emit('new-player-name', newPlayerName);
         });
-        // playerNameToSocketId[newPlayerName] = socket.id;
         games[partieId].players[socket.id].ready = true;
         games[partieId].players[socket.id].playerName = newPlayerName;
         const playerNames = Object.values(games[partieId].players).map(x => { return {
@@ -122,10 +120,10 @@ io.on('connection', (socket) => {
         if (games[partieId] === undefined) {
           return;
         };
-        const playerName = games[partieId].players[socket.id].playerName;
-        const result = games[partieId].game.assignedWords[playerName] === word;
+        const playerId = games[partieId].players[socket.id].Id;
+        const result = games[partieId].game.assignedWords[playerId] === word;
 
-        const teammate = games[partieId].players[playerNameToSocketId[games[partieId].game.assignedHelper[playerName]]];
+        const teammate = games[partieId].players[games[partieId].game.assignedHelper[playerId]];
         if (result) {
             games[partieId].players[socket.id].score += 1;
             teammate.score += 2;

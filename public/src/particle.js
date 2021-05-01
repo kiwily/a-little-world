@@ -7,7 +7,6 @@ function clicked(event) {
   if (clickedTimeout[event.target] !== undefined) {
     return;
   };
-
   socket.emit("tentative", event.target.textContent);
 
   event.target.setAttribute("class", "particle");
